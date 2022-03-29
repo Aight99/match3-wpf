@@ -24,9 +24,6 @@ namespace Match3PlusUltraDeluxEX
 
         public Figure GetFigure(Vector2 position) => _gameGrid.GetFigure(position);
 
-        // public string TestMethod(Vector2 position, FigureType type) =>
-        //     _gameGrid.GetMatchListAndSpawnBonuses(position, type);
-
         public void SelectFigure(Vector2 position)
         {
             if (_state == GameState.FirstClick)

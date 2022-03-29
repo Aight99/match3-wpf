@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace Match3PlusUltraDeluxEX
 {
@@ -21,59 +22,95 @@ namespace Match3PlusUltraDeluxEX
             return _figures[position.X, position.Y];
         }
         
-        public bool TryMatch(Vector2 first, Vector2 second)
+        public bool TryMatch(Vector2 firstPosition, Vector2 secondPosition)
         {
-            var firstType = _figures[first.X, first.Y].Type;
-            var secondType = _figures[second.X, second.Y].Type;
-            if (firstType == secondType)
+            var firstFigure = _figures[firstPosition.X, firstPosition.Y];
+            var secondFigure = _figures[secondPosition.X, secondPosition.Y];
+            if (firstFigure.Type == secondFigure.Type)
             {
                 return false;
             }
             
-            
-            //
+            ExecuteMatch(firstPosition, firstFigure);
+            ExecuteMatch(secondPosition, secondFigure);
             return true;
         }
+
+        private void ExecuteMatch(Vector2 position, Figure firstFigure)
+        {
+            var matchList = GetMatchList(position, firstFigure.Type);
+            if (!TrySetBonus(matchList, firstFigure))
+            {
+                matchList.Add(firstFigure);
+            }
+            foreach (var figure in matchList)
+            {
+                figure.Destroy();
+            }
+        }
         
+        private bool TrySetBonus(List<Figure> match, Figure figureToSet)
+        {
+            bool isEnoughForBomb = match.Count >= 4;
+            bool isEnoughForLine = match.Count == 3;
+            if (isEnoughForBomb)
+            {
+                MessageBox.Show("Бомба!");
+                // figure = bomb
+                return true;
+            }
+            if (isEnoughForLine)
+            {
+                if (match[0].Position.X == figureToSet.Position.X)
+                {
+                    MessageBox.Show("Горизонталь!");
+                    // figure = horizontalLine
+                }
+                else
+                {
+                    MessageBox.Show("Вертикаль!");
+                    // figure = verticalLine
+                }
+                return true;
+            }
+
+            return false;
+        }
+
         // Как нужно реализовать этот метод:
         // Мы возвращаем лист фигурок, участвующих в метче, кроме проверяемой (передвинутой)
         // Решение о её судьбе (уничтожение или превращение в бонус) решается на основе размера списка
         // С бомбой всё просто: если размер >= 4, то бомба 
         // С линией сложне: если размер = 3, то ставниваем координаты любого из списка
         // Если X совпадает с передвинутым, то линия вертикальная, иначе - горизонтальная
-        // private List<Figure> 
-        public string GetMatchListAndSpawnBonuses(Vector2 position, FigureType type)
+        private List<Figure> GetMatchList(Vector2 position, FigureType type)
         {
-            int up = 0, down = 0, left = 0, right = 0; // Зачем
             int horCounter = position.X + 1;
             int vertCounter = position.Y + 1;
             var verticalLine = new List<Figure>();
             var horizontalLine = new List<Figure>();
-            while (horCounter < _gridSize) // Перекинуть циклы в отдельный метод, чтобы зачем?
+            while (horCounter < _gridSize) 
             {
                 if (_figures[horCounter, position.Y].Type != type)
                     break;
                 horizontalLine.Add(_figures[horCounter, position.Y]);
-                right++;
                 horCounter++;
             }
-            while (vertCounter < _gridSize) // Really???
+            while (vertCounter < _gridSize)
             {
                 if (_figures[position.X, vertCounter].Type != type)
                     break;
                 verticalLine.Add(_figures[position.X, vertCounter]);
-                up++;
                 vertCounter++;
             }
             
             horCounter = position.X - 1;
             vertCounter = position.Y - 1;
-            while (horCounter >= 0) // WTF 
+            while (horCounter >= 0) 
             {
                 if (_figures[horCounter, position.Y].Type != type)
                     break;
                 horizontalLine.Add(_figures[horCounter, position.Y]);
-                left++;
                 horCounter--;
             }
             while (vertCounter >= 0)
@@ -81,13 +118,9 @@ namespace Match3PlusUltraDeluxEX
                 if (_figures[position.X, vertCounter].Type != type)
                     break;
                 verticalLine.Add(_figures[position.X, vertCounter]);
-                down++;
                 vertCounter--;
             }
-
-            // int verticalLineCount = up + down + 1;
-            // int horizontalLineCount = right + left + 1;
-
+            
             if (verticalLine.Count < 2)
             {
                 verticalLine.Clear();
@@ -96,33 +129,9 @@ namespace Match3PlusUltraDeluxEX
             {
                 horizontalLine.Clear();
             }
-
-            bool isEnoughForBomb = verticalLine.Count + horizontalLine.Count >= 4;
-            bool isEnoughForLine = verticalLine.Count + horizontalLine.Count == 3;
-            if (isEnoughForBomb)
-            {
-                return $"Бомба! v:{verticalLine.Count}; h:{horizontalLine.Count}";
-            }
-            if (isEnoughForLine)
-            {
-                if (verticalLine.Count == 0 && horizontalLine.Count == 0)
-                {
-                    return "Упс, что-то пошло не так";
-                }
-                if (verticalLine.Count != 0 && horizontalLine.Count != 0)
-                {
-                    return "Упс, что-то пошло не так";
-                }
-                if (verticalLine.Count != 0)
-                {
-                    return $"Вертикальная! v:{verticalLine.Count}; h:{horizontalLine.Count}";
-                }
-                if (horizontalLine.Count != 0)
-                {
-                    return $"Горизонтальная! v:{verticalLine.Count}; h:{horizontalLine.Count}";
-                }
-            }
-            return $"v:{verticalLine.Count}; h:{horizontalLine.Count}";
+            
+            verticalLine.AddRange(horizontalLine);
+            return verticalLine;
         }
 
         private void RandomFill()
@@ -133,7 +142,8 @@ namespace Match3PlusUltraDeluxEX
             {
                 for (int j = 0; j < _gridSize; j++)
                 {
-                    _figures[i, j] ??= new Figure((FigureType) figureTypes.GetValue(random.Next(figureTypes.Length)));
+                    var randomType = (FigureType)figureTypes.GetValue(random.Next(figureTypes.Length));
+                    _figures[i, j] ??= new Figure(randomType, new Vector2(i, j));
                 }
             }
         }

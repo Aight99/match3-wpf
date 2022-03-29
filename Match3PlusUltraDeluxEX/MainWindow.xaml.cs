@@ -29,9 +29,6 @@ namespace Match3PlusUltraDeluxEX
             var id = (Vector2)button.DataContext;
             // MessageBox.Show(id.ToString());
             // button.Content = _game.GetFigure(id);
-            
-            // var msg = _game.TestMethod(id, _game.GetFigure(id).Type);
-            // MessageBox.Show(msg);
         }
 
         private void CreateGridLayout()

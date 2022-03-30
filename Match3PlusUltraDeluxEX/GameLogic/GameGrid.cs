@@ -35,7 +35,7 @@ namespace Match3PlusUltraDeluxEX
             {
                 for (int j = 0; j < _gridSize; j++)
                 {
-                    if (ExecuteMatch(new Vector2(i, j), _figures[i, j]))
+                    if (ExecuteMatch(new Vector2(i, j), ref _figures[i, j]))
                     {
                         isMatched = true;
                     }
@@ -60,8 +60,8 @@ namespace Match3PlusUltraDeluxEX
 
             // var firstTry = !ExecuteMatch(secondPosition, secondFigure);
             // var secondTry = !ExecuteMatch(firstPosition, firstFigure);
-            var firstTry = !ExecuteMatch(secondPosition, _figures[secondPosition.X, secondPosition.Y]);
-            var secondTry = !ExecuteMatch(firstPosition, _figures[firstPosition.X, firstPosition.Y]);
+            var firstTry = !ExecuteMatch(secondPosition, ref _figures[secondPosition.X, secondPosition.Y]);
+            var secondTry = !ExecuteMatch(firstPosition, ref _figures[firstPosition.X, firstPosition.Y]);
             
             if (!firstTry && !secondTry)
             {
@@ -73,14 +73,14 @@ namespace Match3PlusUltraDeluxEX
             return true;
         }
 
-        private bool ExecuteMatch(Vector2 position, IFigure firstFigure)
+        private bool ExecuteMatch(Vector2 position, ref IFigure firstFigure)
         {
             var matchList = GetMatchList(position, firstFigure.Type);
             
             if (matchList.Count == 0)
                 return false;
             
-            if (Game.IsInitialized && !TrySetBonus(matchList, firstFigure))
+            if (Game.IsInitialized && !TrySetBonus(matchList, ref firstFigure))
             {
                 matchList.Add(firstFigure);
             }
@@ -91,14 +91,15 @@ namespace Match3PlusUltraDeluxEX
             return true;
         }
         
-        private bool TrySetBonus(List<IFigure> match, IFigure figureToSet)
+        private bool TrySetBonus(List<IFigure> match, ref IFigure figureToSet)
         {
             bool isEnoughForBomb = match.Count >= 4;
             bool isEnoughForLine = match.Count == 3;
             if (isEnoughForBomb)
             {
                 MessageBox.Show("Бомба!");
-                figureToSet = new Bomb(figureToSet);
+                figureToSet = (IFigure) new Bomb(figureToSet);
+                // figureToSet = new Bomb(figureToSet);
                 return true;
             }
             if (isEnoughForLine)
@@ -106,14 +107,14 @@ namespace Match3PlusUltraDeluxEX
                 if (match[0].Position.X == figureToSet.Position.X)
                 {
                     MessageBox.Show("Вертикаль!");
-                    figureToSet = new VerticalLine(figureToSet);
+                    figureToSet = (IFigure) new VerticalLine(figureToSet);
+                    // figureToSet = new VerticalLine(figureToSet);
                 }
                 else
                 {
                     MessageBox.Show("Горизонталь!");
+                    figureToSet = (IFigure) new HorizontalLine(figureToSet);
                     // figureToSet = new HorizontalLine(figureToSet);
-                    // _figures[0, 0] = (IFigure) new HorizontalLine(_figures[0, 0]);
-                    _figures[0, 0] = new HorizontalLine(figureToSet);
                 }
                 return true;
             }

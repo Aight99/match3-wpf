@@ -4,8 +4,8 @@ namespace Match3PlusUltraDeluxEX
 {
     public interface IFigure
     {
-        public FigureType Type { get; set; }
-        public Vector2 Position { get; set; }
+        FigureType Type { get; set; }
+        Vector2 Position { get; set; }
         void Destroy();
         ImageBrush GetImageBrush();
         bool IsNullObject();

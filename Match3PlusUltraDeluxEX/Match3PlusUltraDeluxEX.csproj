@@ -8,9 +8,20 @@
 
     <ItemGroup>
       <None Remove="img\purple.png" />
-      <Resource Include="img\purple.png" />
       <None Remove="img\yellow.png" />
       <Resource Include="img\yellow.png" />
+      <None Remove="img\Blue.png" />
+      <Resource Include="img\Blue.png" />
+      <None Remove="img\Bomb.png" />
+      <Resource Include="img\Bomb.png" />
+      <None Remove="img\Green.png" />
+      <Resource Include="img\Green.png" />
+      <None Remove="img\Line.png" />
+      <Resource Include="img\Line.png" />
+      <None Remove="img\Pink.png" />
+      <Resource Include="img\Pink.png" />
+      <None Remove="img\Red.png" />
+      <Resource Include="img\Red.png" />
     </ItemGroup>
 
 </Project>

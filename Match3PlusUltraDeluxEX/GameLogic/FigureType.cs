@@ -5,7 +5,7 @@
         Red,
         Green,
         Blue,
-        // Yellow,
-        // Pink
+        Yellow,
+        Pink
     }
 }

@@ -88,20 +88,20 @@ namespace Match3PlusUltraDeluxEX
             _buttons[buttonIndex].Background = new SolidColorBrush(color);
         }
 
-        // public void SetContent() // Not final visualization
-        // {
-        //     foreach (var (key, value) in _buttons)
-        //     {
-        //         if (_game.GetFigure(key).IsNullObject())
-        //         {
-        //             value.Background = new SolidColorBrush(Colors.Crimson);
-        //         }
-        //         else
-        //         {
-        //             value.Background = _game.GetFigure(key).GetImageBrush();
-        //         }
-        //     }
-        // }
+        public void SetContent() // Not final visualization
+        {
+            foreach (var (key, value) in _buttons)
+            {
+                if (_game.GetFigure(key).IsNullObject())
+                {
+                    value.Background = new SolidColorBrush(Colors.Crimson);
+                }
+                else
+                {
+                    value.Background = _game.GetFigure(key).GetImageBrush();
+                }
+            }
+        }
         // public void SetContent() // Not final visualization
         // {
         //     foreach (var (key, value) in _buttons)
@@ -118,38 +118,5 @@ namespace Match3PlusUltraDeluxEX
         //         }
         //     }
         // }
-        public void SetContent() // Not final visualization
-        {
-            foreach (var (key, value) in _buttons)
-            {
-                var ifig = _game.GetFigure(key);
-
-                if (ifig is Bomb)
-                {
-                    value.Content = "Bomb";
-                }
-                else if (ifig is VerticalLine)
-                {
-                    value.Content = "Vert";
-                }
-                else if (ifig is HorizontalLine)
-                {
-                    value.Content = "Hori";
-                }
-                else if (ifig is BasicFigure)
-                {
-                    value.Content = "Это база";
-                }
-
-                if (_game.GetFigure(key).IsNullObject())
-                {
-                    value.Background = new SolidColorBrush(Colors.Crimson);
-                }
-                else
-                {
-                    value.Background = _game.GetFigure(key).GetImageBrush();
-                }
-            }
-        }
     }
 }

@@ -22,6 +22,36 @@
       <Resource Include="img\Pink.png" />
       <None Remove="img\Red.png" />
       <Resource Include="img\Red.png" />
+      <None Remove="img\BombBlue.png" />
+      <Resource Include="img\BombBlue.png" />
+      <None Remove="img\BombGreen.png" />
+      <Resource Include="img\BombGreen.png" />
+      <None Remove="img\BombPink.png" />
+      <Resource Include="img\BombPink.png" />
+      <None Remove="img\BombRed.png" />
+      <Resource Include="img\BombRed.png" />
+      <None Remove="img\BombYellow.png" />
+      <Resource Include="img\BombYellow.png" />
+      <None Remove="img\LineBlue.png" />
+      <Resource Include="img\LineBlue.png" />
+      <None Remove="img\LineBlueH.png" />
+      <Resource Include="img\LineBlueH.png" />
+      <None Remove="img\LineGreen.png" />
+      <Resource Include="img\LineGreen.png" />
+      <None Remove="img\LineGreenH.png" />
+      <Resource Include="img\LineGreenH.png" />
+      <None Remove="img\LinePink.png" />
+      <Resource Include="img\LinePink.png" />
+      <None Remove="img\LinePinkH.png" />
+      <Resource Include="img\LinePinkH.png" />
+      <None Remove="img\LineRed.png" />
+      <Resource Include="img\LineRed.png" />
+      <None Remove="img\LineRedH.png" />
+      <Resource Include="img\LineRedH.png" />
+      <None Remove="img\LineYellow.png" />
+      <Resource Include="img\LineYellow.png" />
+      <None Remove="img\LineYellowH.png" />
+      <Resource Include="img\LineYellowH.png" />
     </ItemGroup>
 
 </Project>

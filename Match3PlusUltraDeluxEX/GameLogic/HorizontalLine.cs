@@ -20,44 +20,30 @@ namespace Match3PlusUltraDeluxEX
             SetNullObject();
         }
 
-        public ImageBrush GetImageBrush()
+        public BitmapImage GetBitmapImage()
         {
-            var image = new ImageBrush();
-            var bitmap = new BitmapImage();
+            Uri uriSource;
             switch (Type)
             {
                 case FigureType.Red:
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(@"pack://application:,,,/img/LineRedH.png");
-                    bitmap.EndInit();
-                    image.ImageSource = bitmap;
-                    break;
+                    uriSource = new Uri(@"pack://application:,,,/img/LineRedH.png");
+                    return new BitmapImage(uriSource);
                 case FigureType.Blue:
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(@"pack://application:,,,/img/LineBlueH.png");
-                    bitmap.EndInit();
-                    image.ImageSource = bitmap;
-                    break;
+                    uriSource = new Uri(@"pack://application:,,,/img/LineBlueH.png");
+                    return new BitmapImage(uriSource);
                 case FigureType.Green:
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(@"pack://application:,,,/img/LineGreenH.png");
-                    bitmap.EndInit();
-                    image.ImageSource = bitmap;
-                    break;
+                    uriSource = new Uri(@"pack://application:,,,/img/LineGreenH.png");
+                    return new BitmapImage(uriSource);
                 case FigureType.Yellow:
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(@"pack://application:,,,/img/LineYellowH.png");
-                    bitmap.EndInit();
-                    image.ImageSource = bitmap;
-                    break;
+                    uriSource = new Uri(@"pack://application:,,,/img/LineYellowH.png");
+                    return new BitmapImage(uriSource);
                 case FigureType.Pink:
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(@"pack://application:,,,/img/LinePinkH.png");
-                    bitmap.EndInit();
-                    image.ImageSource = bitmap;
-                    break;
+                    uriSource = new Uri(@"pack://application:,,,/img/LinePinkH.png");
+                    return new BitmapImage(uriSource);
+                default:
+                    uriSource = new Uri(@"pack://application:,,,/img/Line.png");
+                    return new BitmapImage(uriSource);
             }
-            return image;
         }
 
         public bool IsNullObject()

@@ -1,4 +1,4 @@
-﻿using System.Windows.Media;
+﻿using System.Windows.Media.Imaging;
 
 namespace Match3PlusUltraDeluxEX
 {
@@ -7,7 +7,7 @@ namespace Match3PlusUltraDeluxEX
         FigureType Type { get; set; }
         Vector2 Position { get; set; }
         void Destroy();
-        ImageBrush GetImageBrush();
+        BitmapImage GetBitmapImage();
         bool IsNullObject();
         void SetNullObject();
     }

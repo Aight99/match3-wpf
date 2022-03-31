@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -28,7 +29,7 @@ namespace Match3PlusUltraDeluxEX
 
         public IFigure GetFigure(Vector2 position) => _gameGrid.GetFigure(position);
 
-        public void SelectFigure(Vector2 position)
+        public async void SelectFigure(Vector2 position)
         {
             if (_state == GameState.FirstClick)
             {
@@ -43,13 +44,30 @@ namespace Match3PlusUltraDeluxEX
                     _state = GameState.Animation;
                     if (_gameGrid.TryMatch(_selected, position))
                     {
+                        _window.DestroyAnimation();
+
+                        await Task.Delay(1000);
+                        _gameGrid.PushFiguresDown();
+                        // await Task.Delay(1000);
+                        _window.SetContent();
+                        
                         //
-                        // var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+                        // var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
                         // timer.Start();
                         // timer.Tick += (sender, args) =>
                         // {
                         //     timer.Stop();
-                        //     MessageBox.Show("Timer Off");
+                        // };
+                        //
+
+                        // _gameGrid.PushFiguresDown();
+                        // _window.SetContent();
+
+                        //
+                        // timer.Start();
+                        // timer.Tick += (sender, args) =>
+                        // {
+                        //     timer.Stop();
                         // };
                         //
                     }
@@ -58,7 +76,7 @@ namespace Match3PlusUltraDeluxEX
                 _selected = Vector2.NullObject;
                 _state = GameState.FirstClick;
                 
-                _window.SetContent();
+                //_window.SetContent();
             }
         }
 

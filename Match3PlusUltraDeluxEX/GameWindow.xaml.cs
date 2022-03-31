@@ -31,18 +31,32 @@ namespace Match3PlusUltraDeluxEX
             _game.Initialize();
         }
 
-        public void DestroyAnimation(Vector2 position) => _animator.DestroyAnimation(_images[position]);
-
         public void MarkSelected(Vector2 buttonIndex)
         {
             _buttons[buttonIndex].Background = new SolidColorBrush(Colors.LightCoral);
         }
-        
+
         public void MarkDeselected(Vector2 buttonIndex)
         {
             Color color = ((buttonIndex.X + buttonIndex.Y) % 2 == 0) ? Colors.LightGray : Colors.LightGoldenrodYellow;
             _buttons[buttonIndex].Background = new SolidColorBrush(color);
         }
+
+        public void DestroyAnimation()
+        {
+            for (int i = 0; i < GridSize; i++)
+            {
+                for (int j = 0; j < GridSize; j++)
+                {
+                    var position = new Vector2(i, j);
+                    if (_game.GetFigure(position).IsNullObject())
+                    {
+                        _animator.DestroyAnimation(_images[position]);
+                    }
+                }
+            }
+        } 
+
         public void SetContent()
         {
             for (int i = 0; i < GridSize; i++)
@@ -50,6 +64,7 @@ namespace Match3PlusUltraDeluxEX
                 for (int j = 0; j < GridSize; j++)
                 {
                     var position = new Vector2(i, j);
+                    _game.GetFigure(position).Position = position;
                     if (Game.IsInitialized)
                         CanvasLayout.Children.Remove(_images[position]);
                     var image = new Image
@@ -68,6 +83,8 @@ namespace Match3PlusUltraDeluxEX
         
         private void GridClick(object sender, RoutedEventArgs e)
         {
+            _animator.DestroyAnimation(TimeText);
+            
             var button = (Button)sender;
             var id = (Vector2)button.DataContext;
             _game.SelectFigure(id);

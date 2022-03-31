@@ -47,7 +47,7 @@ namespace Match3PlusUltraDeluxEX
             return isMatched;
         }
         
-        public bool TryMatch(Vector2 firstPosition, Vector2 secondPosition)
+        public bool TryMatch(Vector2 firstPosition, Vector2 secondPosition) // Вообще стоит вынести смену местами
         {
             var firstFigure = _figures[firstPosition.X, firstPosition.Y];
             var secondFigure = _figures[secondPosition.X, secondPosition.Y];
@@ -65,14 +65,35 @@ namespace Match3PlusUltraDeluxEX
             var firstTry = !ExecuteMatch(secondPosition, ref _figures[secondPosition.X, secondPosition.Y]);
             var secondTry = !ExecuteMatch(firstPosition, ref _figures[firstPosition.X, firstPosition.Y]);
             
-            if (!firstTry && !secondTry)
+            if (firstTry && secondTry)
             {
                 (_figures[firstPosition.X, firstPosition.Y], _figures[secondPosition.X, secondPosition.Y]) = (_figures[secondPosition.X, secondPosition.Y], _figures[firstPosition.X, firstPosition.Y]);
             }
             
-            PushFiguresDown();
-            while (TryMatchAll()) {};
+            // PushFiguresDown(); // Вынести 
+            // while (TryMatchAll()) {};// Вынести 
             return true;
+        }
+
+        public void PushFiguresDown()
+        {
+            // Напоминаю, что [0,0] - верхний правый угол игрового поля
+            // Проходим каждый столбец снизу-вверх
+            for (int i = 0; i < _gridSize; i++)
+            {
+                int gap = 0;
+                for (int j = _gridSize - 1; j >= 0; j--)
+                {
+                    if (_figures[i, j].IsNullObject())
+                    {
+                        gap++;
+                    }
+                    else
+                    {
+                        SwapFigures(i, j + gap, i, j);
+                    }
+                }
+            }
         }
 
         private bool ExecuteMatch(Vector2 position, ref IFigure firstFigure)
@@ -92,7 +113,7 @@ namespace Match3PlusUltraDeluxEX
             }
             return true;
         }
-        
+
         private bool TrySetBonus(List<IFigure> match, ref IFigure figureToSet)
         {
             bool isEnoughForBomb = match.Count >= 4;
@@ -123,12 +144,17 @@ namespace Match3PlusUltraDeluxEX
 
             return false;
         }
-        
+
         // Мы возвращаем лист фигурок, участвующих в метче, кроме проверяемой (передвинутой)
+
         // Решение о её судьбе (уничтожение или превращение в бонус) решается на основе размера списка
+
         // С бомбой всё просто: если размер >= 4, то бомба 
+
         // С линией сложне: если размер = 3, то ставниваем координаты любого из списка
+
         // Если X совпадает с передвинутым, то линия вертикальная, иначе - горизонтальная
+
         private List<IFigure> GetMatchList(Vector2 position, FigureType type)
         {
             int horCounter = position.X + 1;
@@ -180,27 +206,6 @@ namespace Match3PlusUltraDeluxEX
             return verticalLine;
         }
 
-        private void PushFiguresDown()
-        {
-            // Напоминаю, что [0,0] - верхний правый угол игрового поля
-            // Проходим каждый столбец снизу-вверх
-            for (int i = 0; i < _gridSize; i++)
-            {
-                int gap = 0;
-                for (int j = _gridSize - 1; j >= 0; j--)
-                {
-                    if (_figures[i, j].IsNullObject())
-                    {
-                        gap++;
-                    }
-                    else
-                    {
-                        SwapFigures(i, j + gap, i, j);
-                    }
-                }
-            }
-        }
-        
         private void RandomFill()
         {
             var random = new Random();

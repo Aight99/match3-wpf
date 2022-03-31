@@ -1,4 +1,8 @@
-﻿namespace Match3PlusUltraDeluxEX
+﻿using System;
+using System.Windows;
+using System.Windows.Threading;
+
+namespace Match3PlusUltraDeluxEX
 {
     public enum GameState
     {
@@ -39,7 +43,15 @@
                     _state = GameState.Animation;
                     if (_gameGrid.TryMatch(_selected, position))
                     {
-                        // Something or Nothing 
+                        //
+                        // var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+                        // timer.Start();
+                        // timer.Tick += (sender, args) =>
+                        // {
+                        //     timer.Stop();
+                        //     MessageBox.Show("Timer Off");
+                        // };
+                        //
                     }
                 }
                 _window.MarkDeselected(_selected);

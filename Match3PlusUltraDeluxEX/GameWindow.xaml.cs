@@ -11,6 +11,9 @@ namespace Match3PlusUltraDeluxEX
     {
         private const int GridSize = 8;
         private const int CellSizePx = 70;
+        private readonly int CanvasTop = 80; // XAML 
+        private readonly int CanvasLeft = 260;
+        
         private Dictionary<Vector2, Button> _buttons;
         private Game _game;
 
@@ -90,6 +93,8 @@ namespace Match3PlusUltraDeluxEX
 
         public void SetContent() // Not final visualization
         {
+            
+            
             foreach (var (key, value) in _buttons)
             {
                 if (_game.GetFigure(key).IsNullObject())
@@ -100,8 +105,42 @@ namespace Match3PlusUltraDeluxEX
                 {
                     value.Background = _game.GetFigure(key).GetImageBrush();
                 }
+                
+            }
+            
+            for (int i = 0; i < GridSize; i++)
+            {
+                for (int j = 0; j < GridSize; j++)
+                {
+                    //
+                    var image = new Image
+                    {
+                        Source = new BitmapImage(new Uri(@"pack://application:,,,/img/Yellow.png")),
+                        Width = CellSizePx
+                    };
+                    Canvas.SetTop(image, CanvasTop + CellSizePx * i);
+                    Canvas.SetLeft(image, CanvasLeft + CellSizePx * j);
+                    image.IsHitTestVisible = false;
+                    CanvasLayout.Children.Add(image);
+                    //
+                }
             }
         }
+        
+        // public void SetContent() // Not final visualization
+        // {
+        //     foreach (var (key, value) in _buttons)
+        //     {
+        //         if (_game.GetFigure(key).IsNullObject())
+        //         {
+        //             value.Background = new SolidColorBrush(Colors.Crimson);
+        //         }
+        //         else
+        //         {
+        //             value.Background = _game.GetFigure(key).GetImageBrush();
+        //         }
+        //     }
+        // }
         // public void SetContent() // Not final visualization
         // {
         //     foreach (var (key, value) in _buttons)

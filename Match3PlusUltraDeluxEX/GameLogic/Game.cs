@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Match3PlusUltraDeluxEX
 {
@@ -47,7 +48,9 @@ namespace Match3PlusUltraDeluxEX
                     {
                         _window.DestroyAnimation();
                         await Task.Delay(500);
-                        _gameGrid.PushFiguresDown(); // Эта штука должна возвращать лист анимаций
+                        _gameGrid.PushFiguresDown(out var fromList, out var toList); 
+                        _window.PushDownAnimation(fromList, toList);
+                        await Task.Delay(200);
                         _window.SetVisuals();
                         await Task.Delay(500);
                         _gameGrid.RandomFill();

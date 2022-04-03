@@ -63,6 +63,15 @@ namespace Match3PlusUltraDeluxEX
             _animator.MoveAnimation(firstFigure, firstPosition, secondPosition);
             _animator.MoveAnimation(secondFigure, secondPosition, firstPosition);
         }
+        
+        public void PushDownAnimation(List<Vector2> dropsFrom, List<Vector2> dropsTo)
+        {
+            for (int i = 0; i < dropsFrom.Count; i++)
+            {
+                var figure = _images[dropsFrom[i]];
+                _animator.MoveAnimation(figure, dropsFrom[i], dropsTo[i]);
+            }
+        }
 
         public void SetVisuals()
         {

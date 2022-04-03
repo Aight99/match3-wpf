@@ -54,8 +54,10 @@ namespace Match3PlusUltraDeluxEX
             // while (TryMatchAll()) {};// Вынести 
         }
 
-        public void PushFiguresDown() 
+        public void PushFiguresDown(out List<Vector2> dropsFrom, out List<Vector2> dropsTo)
         {
+            dropsFrom = new List<Vector2>();
+            dropsTo = new List<Vector2>();
             // Напоминаю, что [0,0] - верхний правый угол игрового поля
             // Проходим каждый столбец снизу-вверх
             for (int i = 0; i < _gridSize; i++)
@@ -70,6 +72,8 @@ namespace Match3PlusUltraDeluxEX
                     else
                     {
                         SwapFigures(i, j + gap, i, j);
+                        dropsFrom.Add(new Vector2(i, j));
+                        dropsTo.Add(new Vector2(i, j + gap));
                     }
                 }
             }

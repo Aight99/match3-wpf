@@ -99,7 +99,6 @@ namespace Match3PlusUltraDeluxEX
             bool isEnoughForLine = match.Count == 3;
             if (isEnoughForBomb)
             {
-                MessageBox.Show("Бомба!");
                 figureToSet = (IFigure) new Bomb(figureToSet);
                 return true;
             }
@@ -107,12 +106,10 @@ namespace Match3PlusUltraDeluxEX
             {
                 if (match[0].Position.X == figureToSet.Position.X)
                 {
-                    MessageBox.Show("Вертикаль!");
                     figureToSet = (IFigure) new VerticalLine(figureToSet);
                 }
                 else
                 {
-                    MessageBox.Show("Горизонталь!");
                     figureToSet = (IFigure) new HorizontalLine(figureToSet);
                 }
                 return true;

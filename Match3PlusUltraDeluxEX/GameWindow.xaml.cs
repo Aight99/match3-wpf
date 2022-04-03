@@ -7,10 +7,10 @@ namespace Match3PlusUltraDeluxEX
 {
     public partial class GameWindow : Window
     {
-        private const int GridSize = 8;
-        private const int CellSizePx = 70;
-        private readonly int CanvasTop = 80; // XAML 
-        private readonly int CanvasLeft = 260;
+        public const int GridSize = 8;
+        public const int CellSizePx = 70;
+        public const int CanvasTop = 80; // XAML 
+        public const int CanvasLeft = 260;
 
         private Dictionary<Vector2, Image> _images;
         private Dictionary<Vector2, Button> _buttons;
@@ -54,7 +54,15 @@ namespace Match3PlusUltraDeluxEX
                     }
                 }
             }
-        } 
+        }
+
+        public void SwapAnimation(Vector2 firstPosition, Vector2 secondPosition)
+        {
+            var firstFigure = _images[firstPosition];
+            var secondFigure = _images[secondPosition];
+            _animator.MoveAnimation(firstFigure, firstPosition, secondPosition);
+            _animator.MoveAnimation(secondFigure, secondPosition, firstPosition);
+        }
 
         public void SetVisuals()
         {

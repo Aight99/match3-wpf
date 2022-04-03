@@ -26,7 +26,7 @@ namespace Match3PlusUltraDeluxEX
 
         public IFigure GetFigure(Vector2 position) => _gameGrid.GetFigure(position);
 
-        public async void SelectFigure(Vector2 position)
+        public async void SelectFigure(Vector2 position) // Сделать конфиг для волшебных чисел в задержках?
         {
             if (_state == GameState.FirstClick)
             {
@@ -40,13 +40,14 @@ namespace Match3PlusUltraDeluxEX
                 {
                     _state = GameState.Animation;
                     SwapFigures(position);
+                    await Task.Delay(200);
                     _window.SetVisuals();
                     await Task.Delay(100);
                     if (_gameGrid.TryMatch(_selected, position))
                     {
                         _window.DestroyAnimation();
                         await Task.Delay(500);
-                        _gameGrid.PushFiguresDown();
+                        _gameGrid.PushFiguresDown(); // Эта штука должна возвращать лист анимаций
                         _window.SetVisuals();
                         await Task.Delay(500);
                         _gameGrid.RandomFill();
@@ -56,6 +57,7 @@ namespace Match3PlusUltraDeluxEX
                     else
                     {
                         SwapFigures(position);
+                        await Task.Delay(200);
                         _window.SetVisuals();
                         await Task.Delay(100);
                     }
@@ -69,7 +71,7 @@ namespace Match3PlusUltraDeluxEX
         private void SwapFigures(Vector2 position)
         {
             _gameGrid.SwapFigures(_selected, position);
-            // Swap animation
+            _window.SwapAnimation(_selected, position);
         }
 
         public void Initialize()

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
+﻿using System.Threading.Tasks;
 
 namespace Match3PlusUltraDeluxEX
 {
@@ -42,42 +39,37 @@ namespace Match3PlusUltraDeluxEX
                 if (_selected.IsNearby(position))
                 {
                     _state = GameState.Animation;
+                    SwapFigures(position);
+                    _window.SetVisuals();
+                    await Task.Delay(100);
                     if (_gameGrid.TryMatch(_selected, position))
                     {
                         _window.DestroyAnimation();
-
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                         _gameGrid.PushFiguresDown();
-                        // await Task.Delay(1000);
-                        _window.SetContent();
-                        
-                        //
-                        // var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
-                        // timer.Start();
-                        // timer.Tick += (sender, args) =>
-                        // {
-                        //     timer.Stop();
-                        // };
-                        //
+                        _window.SetVisuals();
+                        await Task.Delay(500);
+                        _gameGrid.RandomFill();
+                        _window.SetVisuals();
 
-                        // _gameGrid.PushFiguresDown();
-                        // _window.SetContent();
-
-                        //
-                        // timer.Start();
-                        // timer.Tick += (sender, args) =>
-                        // {
-                        //     timer.Stop();
-                        // };
-                        //
+                    }
+                    else
+                    {
+                        SwapFigures(position);
+                        _window.SetVisuals();
+                        await Task.Delay(100);
                     }
                 }
                 _window.MarkDeselected(_selected);
                 _selected = Vector2.NullObject;
                 _state = GameState.FirstClick;
-                
-                //_window.SetContent();
             }
+        }
+
+        private void SwapFigures(Vector2 position)
+        {
+            _gameGrid.SwapFigures(_selected, position);
+            // Swap animation
         }
 
         public void Initialize()

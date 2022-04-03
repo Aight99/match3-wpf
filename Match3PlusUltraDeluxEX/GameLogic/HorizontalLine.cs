@@ -14,10 +14,11 @@ namespace Match3PlusUltraDeluxEX
 
         public FigureType Type { get; set; }
         public Vector2 Position { get; set; }
+        public bool IsNullObject { get; private set; }
 
         public void Destroy()
         {
-            SetNullObject();
+            IsNullObject = true;
         }
 
         public BitmapImage GetBitmapImage()
@@ -44,16 +45,6 @@ namespace Match3PlusUltraDeluxEX
                     uriSource = new Uri(@"pack://application:,,,/img/Line.png");
                     return new BitmapImage(uriSource);
             }
-        }
-
-        public bool IsNullObject()
-        {
-            return Position.Equals(Vector2.NullObject);
-        }
-
-        public void SetNullObject()
-        {
-            Position = Vector2.NullObject;
         }
     }
 }

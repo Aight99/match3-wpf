@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Match3PlusUltraDeluxEX
 {
@@ -14,10 +12,11 @@ namespace Match3PlusUltraDeluxEX
         private readonly int CanvasTop = 80; // XAML 
         private readonly int CanvasLeft = 260;
 
-        private static Dictionary<Vector2, Image> _images;
+        private Dictionary<Vector2, Image> _images;
         private Dictionary<Vector2, Button> _buttons;
         private Game _game;
         private GameAnimator _animator;
+        private bool _isWindowInitialized = false;
 
         public GameWindow()
         {
@@ -27,8 +26,8 @@ namespace Match3PlusUltraDeluxEX
             _buttons = new Dictionary<Vector2, Button>();
             _images = new Dictionary<Vector2, Image>();
             CreateGridLayout();
-            SetContent();
             _game.Initialize();
+            SetVisuals();
         }
 
         public void MarkSelected(Vector2 buttonIndex)
@@ -43,13 +42,13 @@ namespace Match3PlusUltraDeluxEX
         }
 
         public void DestroyAnimation()
-        {
+        { 
             for (int i = 0; i < GridSize; i++)
             {
                 for (int j = 0; j < GridSize; j++)
                 {
                     var position = new Vector2(i, j);
-                    if (_game.GetFigure(position).IsNullObject())
+                    if (_game.GetFigure(position).IsNullObject)
                     {
                         _animator.DestroyAnimation(_images[position]);
                     }
@@ -57,16 +56,20 @@ namespace Match3PlusUltraDeluxEX
             }
         } 
 
-        public void SetContent()
+        public void SetVisuals()
         {
             for (int i = 0; i < GridSize; i++)
             {
                 for (int j = 0; j < GridSize; j++)
                 {
                     var position = new Vector2(i, j);
-                    _game.GetFigure(position).Position = position;
-                    if (Game.IsInitialized)
+                    if (Game.IsInitialized && _isWindowInitialized)
                         CanvasLayout.Children.Remove(_images[position]);
+
+                    var figure = _game.GetFigure(position);
+                    if (figure.IsNullObject)
+                        continue;
+                    
                     var image = new Image
                     {
                         Source = _game.GetFigure(position).GetBitmapImage(),
@@ -79,12 +82,12 @@ namespace Match3PlusUltraDeluxEX
                     _images[position] = image;
                 }
             }
+
+            _isWindowInitialized = true;
         }
-        
+
         private void GridClick(object sender, RoutedEventArgs e)
         {
-            _animator.DestroyAnimation(TimeText);
-            
             var button = (Button)sender;
             var id = (Vector2)button.DataContext;
             _game.SelectFigure(id);

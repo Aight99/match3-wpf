@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace Match3PlusUltraDeluxEX
 {
     public class GameGrid
     {
+        private readonly Random _random = new Random();
+
         // Точка [0,0] - верхний правый угол игрового поля
         private IFigure[,] _figures;
         private readonly int _gridSize;
@@ -19,16 +19,15 @@ namespace Match3PlusUltraDeluxEX
             RandomFill();
         }
 
-        public IFigure GetFigure(Vector2 position)
-        {
-            return _figures[position.X, position.Y];
-        }
+        public IFigure GetFigure(Vector2 position) => _figures[position.X, position.Y];
 
         private void SwapFigures(int x1, int y1, int x2, int y2)
         {
             (_figures[x1, y1].Position, _figures[x2, y2].Position) = (_figures[x2, y2].Position, _figures[x1, y1].Position);
             (_figures[x1, y1], _figures[x2, y2]) = (_figures[x2, y2], _figures[x1, y1]);
         }
+
+        public void SwapFigures(Vector2 firstPosition, Vector2 secondPosition) => SwapFigures(firstPosition.X, firstPosition.Y, secondPosition.X, secondPosition.Y);
 
         public bool TryMatchAll()
         {
@@ -46,36 +45,16 @@ namespace Match3PlusUltraDeluxEX
             RandomFill();
             return isMatched;
         }
-        
-        public bool TryMatch(Vector2 firstPosition, Vector2 secondPosition) // Вообще стоит вынести смену местами
+
+        public bool TryMatch(Vector2 firstPosition, Vector2 secondPosition) 
         {
-            var firstFigure = _figures[firstPosition.X, firstPosition.Y];
-            var secondFigure = _figures[secondPosition.X, secondPosition.Y];
-            if (firstFigure.Type == secondFigure.Type)
-            {
-                return false;
-            }
-
-            SwapFigures(firstPosition.X, firstPosition.Y, secondPosition.X, secondPosition.Y);
-            // firstFigure = _figures[firstPosition.X, firstPosition.Y];
-            // secondFigure = _figures[secondPosition.X, secondPosition.Y];
-
-            // var firstTry = !ExecuteMatch(secondPosition, secondFigure);
-            // var secondTry = !ExecuteMatch(firstPosition, firstFigure);
-            var firstTry = !ExecuteMatch(secondPosition, ref _figures[secondPosition.X, secondPosition.Y]);
-            var secondTry = !ExecuteMatch(firstPosition, ref _figures[firstPosition.X, firstPosition.Y]);
-            
-            if (firstTry && secondTry)
-            {
-                (_figures[firstPosition.X, firstPosition.Y], _figures[secondPosition.X, secondPosition.Y]) = (_figures[secondPosition.X, secondPosition.Y], _figures[firstPosition.X, firstPosition.Y]);
-            }
-            
-            // PushFiguresDown(); // Вынести 
+            var firstTry = ExecuteMatch(secondPosition, ref _figures[secondPosition.X, secondPosition.Y]);
+            var secondTry = ExecuteMatch(firstPosition, ref _figures[firstPosition.X, firstPosition.Y]);
+            return (firstTry || secondTry);
             // while (TryMatchAll()) {};// Вынести 
-            return true;
         }
 
-        public void PushFiguresDown()
+        public void PushFiguresDown() 
         {
             // Напоминаю, что [0,0] - верхний правый угол игрового поля
             // Проходим каждый столбец снизу-вверх
@@ -84,7 +63,7 @@ namespace Match3PlusUltraDeluxEX
                 int gap = 0;
                 for (int j = _gridSize - 1; j >= 0; j--)
                 {
-                    if (_figures[i, j].IsNullObject())
+                    if (_figures[i, j].IsNullObject)
                     {
                         gap++;
                     }
@@ -122,7 +101,6 @@ namespace Match3PlusUltraDeluxEX
             {
                 MessageBox.Show("Бомба!");
                 figureToSet = (IFigure) new Bomb(figureToSet);
-                // figureToSet = new Bomb(figureToSet);
                 return true;
             }
             if (isEnoughForLine)
@@ -131,13 +109,11 @@ namespace Match3PlusUltraDeluxEX
                 {
                     MessageBox.Show("Вертикаль!");
                     figureToSet = (IFigure) new VerticalLine(figureToSet);
-                    // figureToSet = new VerticalLine(figureToSet);
                 }
                 else
                 {
                     MessageBox.Show("Горизонталь!");
                     figureToSet = (IFigure) new HorizontalLine(figureToSet);
-                    // figureToSet = new HorizontalLine(figureToSet);
                 }
                 return true;
             }
@@ -146,15 +122,10 @@ namespace Match3PlusUltraDeluxEX
         }
 
         // Мы возвращаем лист фигурок, участвующих в метче, кроме проверяемой (передвинутой)
-
         // Решение о её судьбе (уничтожение или превращение в бонус) решается на основе размера списка
-
         // С бомбой всё просто: если размер >= 4, то бомба 
-
         // С линией сложне: если размер = 3, то ставниваем координаты любого из списка
-
         // Если X совпадает с передвинутым, то линия вертикальная, иначе - горизонтальная
-
         private List<IFigure> GetMatchList(Vector2 position, FigureType type)
         {
             int horCounter = position.X + 1;
@@ -206,17 +177,18 @@ namespace Match3PlusUltraDeluxEX
             return verticalLine;
         }
 
-        private void RandomFill()
+        public void RandomFill()
         {
-            var random = new Random();
             var figureTypes = Enum.GetValues(typeof(FigureType));
             for (int i = 0; i < _gridSize; i++)
             {
                 for (int j = 0; j < _gridSize; j++)
                 {
-                    var randomType = (FigureType)figureTypes.GetValue(random.Next(figureTypes.Length));
-                    if (_figures[i, j] == null  || _figures[i, j].IsNullObject())
+                    if (_figures[i, j] == null || _figures[i, j].IsNullObject)
+                    {
+                        var randomType = (FigureType)figureTypes.GetValue(_random.Next(figureTypes.Length));
                         _figures[i, j] = new BasicFigure(randomType, new Vector2(i, j));
+                    }
                 }
             }
         }

@@ -1,26 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Match3PlusUltraDeluxEX
 {
     public class Bomb : IFigure
     {
+        public FigureType Type { get; set; }
+        public Vector2 Position { get; set; }
+        public bool IsNullObject { get; private set; }
+        
+        private const int PointsForDestroying = 100;
+
         public Bomb(IFigure figure)
         {
             Position = figure.Position;
             Type = figure.Type;
         }
 
-        public FigureType Type { get; set; }
-        public Vector2 Position { get; set; }
-        public bool IsNullObject { get; private set; }
-
         public void Destroy(IFigure[,] list)
         {
             if (IsNullObject)
                 return;
+            Game.AddScore(PointsForDestroying);
             IsNullObject = true;
             ActivateBonus(list);
         }

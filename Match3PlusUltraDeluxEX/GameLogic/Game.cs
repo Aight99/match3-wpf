@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Match3PlusUltraDeluxEX
 {
@@ -14,9 +13,14 @@ namespace Match3PlusUltraDeluxEX
         public static bool IsInitialized { get; private set; } = false;
         private static int _score;
         private readonly GameWindow _window;
-        private GameGrid _gameGrid;
+        private readonly GameGrid _gameGrid;
         private GameState _state;
         private Vector2 _selected = Vector2.NullObject;
+
+        private const int SwapDelayMilliseconds = 200;
+        private const int VisualsDelayMilliseconds = 100;
+        private const int DestroyDelayMilliseconds = 500;
+        private const int PushDownDelayMilliseconds = 200;
 
         public Game(GameWindow window, int gridSize)
         {
@@ -27,7 +31,7 @@ namespace Match3PlusUltraDeluxEX
 
         public IFigure GetFigure(Vector2 position) => _gameGrid.GetFigure(position);
 
-        public async void SelectFigure(Vector2 position) // Сделать конфиг для волшебных чисел в задержках?
+        public async void SelectFigure(Vector2 position)
         {
             if (_state == GameState.FirstClick)
             {
@@ -37,39 +41,38 @@ namespace Match3PlusUltraDeluxEX
             }
             else if (_state == GameState.SecondClick) 
             {
-                if (_selected.IsNearby(position)) // Вынести в отдельный метод
+                if (_selected.IsNearby(position))
                 {
                     _state = GameState.Animation;
                     SwapFigures(position);
-                    await Task.Delay(200);
+                    await Task.Delay(SwapDelayMilliseconds);
                     _window.SetVisuals();
-                    await Task.Delay(100);
+                    await Task.Delay(VisualsDelayMilliseconds);
                     if (_gameGrid.TryMatch(_selected, position))
                     {
                         _window.MarkDeselected(_selected);
                         _window.DestroyAnimation();
-                        await Task.Delay(500);
+                        await Task.Delay(DestroyDelayMilliseconds);
                         _gameGrid.PushFiguresDown(out var fromList, out var toList); 
                         _window.PushDownAnimation(fromList, toList);
-                        await Task.Delay(200);
+                        await Task.Delay(PushDownDelayMilliseconds);
                         _window.SetVisuals();
-                        await Task.Delay(100);
+                        await Task.Delay(VisualsDelayMilliseconds);
                         _gameGrid.RandomFill();
                         _window.SetVisuals();
 
-                        while (_gameGrid.TryMatchAll()) // Не ну рыли рефакторинг нужен
+                        while (_gameGrid.TryMatchAll())
                         {
-                            await Task.Delay(200);
+                            await Task.Delay(VisualsDelayMilliseconds);
                             _window.DestroyAnimation();
-                            await Task.Delay(500);
+                            await Task.Delay(DestroyDelayMilliseconds);
                             _gameGrid.PushFiguresDown(out fromList, out toList); 
                             _window.PushDownAnimation(fromList, toList);
-                            await Task.Delay(200);
+                            await Task.Delay(PushDownDelayMilliseconds);
                             _window.SetVisuals();
-                            await Task.Delay(100);
+                            await Task.Delay(VisualsDelayMilliseconds);
                             _gameGrid.RandomFill();
                             _window.SetVisuals();
-                            await Task.Delay(200);
                         }
                         
                     }
@@ -77,9 +80,9 @@ namespace Match3PlusUltraDeluxEX
                     {
                         _window.MarkDeselected(_selected);
                         SwapFigures(position);
-                        await Task.Delay(200);
+                        await Task.Delay(SwapDelayMilliseconds);
                         _window.SetVisuals();
-                        await Task.Delay(100);
+                        await Task.Delay(VisualsDelayMilliseconds);
                     }
                 }
                 else
@@ -103,7 +106,8 @@ namespace Match3PlusUltraDeluxEX
             IsInitialized = true;
         }
 
+        public int GetScore() => _score;
         public static void AddScore(int points) => _score += points;
-        public static void NullifyScore(int points) => _score = 0;
+        public static void NullifyScore() => _score = 0;
     }
 }

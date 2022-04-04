@@ -8,8 +8,10 @@
         Title="MainWindow" Height="720" Width="1080">
     
     <Canvas x:Name="CanvasLayout">
-        <TextBlock x:Name="ScoreText" Text="Score: сто тыщ" FontSize="24" Canvas.Left="300" Canvas.Top="10"/>
-        <TextBlock x:Name="TimeText" Text="Time: 7 days" FontSize="24" Canvas.Left="300" Canvas.Top="35"/>
+        <TextBlock Text="Score:" FontSize="24" Canvas.Left="300" Canvas.Top="10"/>
+        <TextBlock x:Name="ScoreText" Text="" FontSize="24" TextAlignment="Left" Canvas.Left="370" Canvas.Top="10"/>
+        <TextBlock Text="Time:" FontSize="24" Canvas.Left="300" Canvas.Top="35"/>
+        <TextBlock x:Name="TimeText" Text="7 days" FontSize="24" Canvas.Left="370" Canvas.Top="35"/>
         <Grid x:Name="GridLayout" Canvas.Top="80" Canvas.Left="260"/>
     </Canvas>
     

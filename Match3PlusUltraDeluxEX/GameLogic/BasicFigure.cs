@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Match3PlusUltraDeluxEX
@@ -10,6 +9,8 @@ namespace Match3PlusUltraDeluxEX
         public Vector2 Position { get; set; }
         
         public bool IsNullObject { get; private set; }
+        
+        private const int PointsForDestroying = 100;
 
         public BasicFigure(FigureType type, Vector2 position)
         {
@@ -21,7 +22,7 @@ namespace Match3PlusUltraDeluxEX
         {
             if (IsNullObject)
                 return;
-            // Score++;
+            Game.AddScore(PointsForDestroying);
             IsNullObject = true;
         }
 

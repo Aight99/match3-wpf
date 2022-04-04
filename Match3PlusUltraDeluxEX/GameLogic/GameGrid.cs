@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 
 namespace Match3PlusUltraDeluxEX
 {
@@ -9,7 +8,7 @@ namespace Match3PlusUltraDeluxEX
         private readonly Random _random = new Random();
 
         // Точка [0,0] - верхний правый угол игрового поля
-        private IFigure[,] _figures;
+        private readonly IFigure[,] _figures;
         private readonly int _gridSize;
 
         public GameGrid(int gridSize)

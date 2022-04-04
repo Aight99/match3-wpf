@@ -5,20 +5,23 @@ namespace Match3PlusUltraDeluxEX
 {
     public class VerticalLine : IFigure
     {
+        public FigureType Type { get; set; }
+        public Vector2 Position { get; set; }
+        public bool IsNullObject { get; private set; }
+        
+        private const int PointsForDestroying = 100;
+
         public VerticalLine(IFigure figure)
         {
             Position = figure.Position;
             Type = figure.Type;
         }
 
-        public FigureType Type { get; set; }
-        public Vector2 Position { get; set; }
-        public bool IsNullObject { get; private set; }
-
         public void Destroy(IFigure[,] list)
         {
             if (IsNullObject)
                 return;
+            Game.AddScore(PointsForDestroying);
             IsNullObject = true;
             ActivateBonus(list);
         }

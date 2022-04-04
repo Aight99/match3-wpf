@@ -12,10 +12,10 @@ namespace Match3PlusUltraDeluxEX
         public const int CanvasTop = 80; // XAML 
         public const int CanvasLeft = 260;
 
-        private Dictionary<Vector2, Image> _images;
-        private Dictionary<Vector2, Button> _buttons;
-        private Game _game;
-        private GameAnimator _animator;
+        private readonly Dictionary<Vector2, Image> _images;
+        private readonly Dictionary<Vector2, Button> _buttons;
+        private readonly Game _game;
+        private readonly GameAnimator _animator;
         private bool _isWindowInitialized = false;
 
         public GameWindow()
@@ -28,6 +28,7 @@ namespace Match3PlusUltraDeluxEX
             CreateGridLayout();
             _game.Initialize();
             SetVisuals();
+            Game.NullifyScore();
         }
 
         public void MarkSelected(Vector2 buttonIndex)
@@ -99,8 +100,14 @@ namespace Match3PlusUltraDeluxEX
                     _images[position] = image;
                 }
             }
-
+            UpdateScore();
             _isWindowInitialized = true;
+        }
+
+        private void UpdateScore()
+        {
+            var score = _game.GetScore();
+            ScoreText.Text = score.ToString();
         }
 
         private void GridClick(object sender, RoutedEventArgs e)

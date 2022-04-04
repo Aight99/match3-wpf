@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -16,9 +17,48 @@ namespace Match3PlusUltraDeluxEX
         public Vector2 Position { get; set; }
         public bool IsNullObject { get; private set; }
 
-        public void Destroy()
+        public void Destroy(IFigure[,] list)
         {
+            if (IsNullObject)
+                return;
             IsNullObject = true;
+            ActivateBonus(list);
+        }
+
+        private void ActivateBonus(IFigure[,] list)
+        {
+            if (Position.Y > 0)
+            {
+                list[Position.X, Position.Y - 1].Destroy(list);
+                if (Position.X > 0)
+                {
+                    list[Position.X - 1, Position.Y - 1].Destroy(list);
+                }
+                if (Position.X < GameWindow.GridSize - 1)
+                {
+                    list[Position.X + 1, Position.Y - 1].Destroy(list);
+                }
+            }
+            if (Position.Y < GameWindow.GridSize - 1)
+            {
+                list[Position.X, Position.Y + 1].Destroy(list);
+                if (Position.X > 0)
+                {
+                    list[Position.X - 1, Position.Y + 1].Destroy(list);
+                }
+                if (Position.X < GameWindow.GridSize - 1)
+                {
+                    list[Position.X + 1, Position.Y + 1].Destroy(list);
+                }
+            }
+            if (Position.X > 0)
+            {
+                list[Position.X - 1, Position.Y].Destroy(list);
+            }
+            if (Position.X < GameWindow.GridSize - 1)
+            {
+                list[Position.X + 1, Position.Y].Destroy(list);
+            }
         }
 
         public BitmapImage GetBitmapImage()

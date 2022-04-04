@@ -52,15 +52,12 @@ namespace Match3PlusUltraDeluxEX
             var firstTry = ExecuteMatch(secondPosition, ref _figures[secondPosition.X, secondPosition.Y]);
             var secondTry = ExecuteMatch(firstPosition, ref _figures[firstPosition.X, firstPosition.Y]);
             return (firstTry || secondTry);
-            // while (TryMatchAll()) {};// Вынести 
         }
 
         public void PushFiguresDown(out List<Vector2> dropsFrom, out List<Vector2> dropsTo)
         {
             dropsFrom = new List<Vector2>();
             dropsTo = new List<Vector2>();
-            // Напоминаю, что [0,0] - верхний правый угол игрового поля
-            // Проходим каждый столбец снизу-вверх
             for (int i = 0; i < _gridSize; i++)
             {
                 int gap = 0;
@@ -91,9 +88,10 @@ namespace Match3PlusUltraDeluxEX
             {
                 matchList.Add(firstFigure);
             }
+            
             foreach (var figure in matchList)
             {
-                figure.Destroy();
+                figure.Destroy(_figures);
             }
             return true;
         }

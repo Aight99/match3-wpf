@@ -7,7 +7,7 @@ namespace Match3PlusUltraDeluxEX
         FigureType Type { get; set; }
         Vector2 Position { get; set; }
         bool IsNullObject { get; }
-        void Destroy();
+        void Destroy(IFigure[,] list);
         BitmapImage GetBitmapImage();
     }
 }

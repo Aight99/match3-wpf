@@ -53,7 +53,7 @@ namespace Match3PlusUltraDeluxEX
                         _window.PushDownAnimation(fromList, toList);
                         await Task.Delay(200);
                         _window.SetVisuals();
-                        await Task.Delay(500);
+                        await Task.Delay(100);
                         _gameGrid.RandomFill();
                         _window.SetVisuals();
 
@@ -66,7 +66,7 @@ namespace Match3PlusUltraDeluxEX
                             _window.PushDownAnimation(fromList, toList);
                             await Task.Delay(200);
                             _window.SetVisuals();
-                            await Task.Delay(500);
+                            await Task.Delay(100);
                             _gameGrid.RandomFill();
                             _window.SetVisuals();
                             await Task.Delay(200);

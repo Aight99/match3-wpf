@@ -17,8 +17,10 @@ namespace Match3PlusUltraDeluxEX
             Position = position;
         }
 
-        public void Destroy()
+        public void Destroy(IFigure[,] list)
         {
+            if (IsNullObject)
+                return;
             // Score++;
             IsNullObject = true;
         }

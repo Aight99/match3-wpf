@@ -16,9 +16,20 @@ namespace Match3PlusUltraDeluxEX
         public Vector2 Position { get; set; }
         public bool IsNullObject { get; private set; }
 
-        public void Destroy()
+        public void Destroy(IFigure[,] list)
         {
+            if (IsNullObject)
+                return;
             IsNullObject = true;
+            ActivateBonus(list);
+        }
+        
+        private void ActivateBonus(IFigure[,] list)
+        {
+            for (int i = 0; i < GameWindow.GridSize; i++)
+            {
+                list[i, Position.Y].Destroy(list);
+            }
         }
 
         public BitmapImage GetBitmapImage()

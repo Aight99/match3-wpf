@@ -35,9 +35,9 @@ namespace Match3PlusUltraDeluxEX
                 _window.MarkSelected(_selected);
                 _state = GameState.SecondClick;
             }
-            else if (_state == GameState.SecondClick)
+            else if (_state == GameState.SecondClick) 
             {
-                if (_selected.IsNearby(position))
+                if (_selected.IsNearby(position)) // Вынести в отдельный метод
                 {
                     _state = GameState.Animation;
                     SwapFigures(position);
@@ -46,6 +46,7 @@ namespace Match3PlusUltraDeluxEX
                     await Task.Delay(100);
                     if (_gameGrid.TryMatch(_selected, position))
                     {
+                        _window.MarkDeselected(_selected);
                         _window.DestroyAnimation();
                         await Task.Delay(500);
                         _gameGrid.PushFiguresDown(out var fromList, out var toList); 
@@ -56,16 +57,35 @@ namespace Match3PlusUltraDeluxEX
                         _gameGrid.RandomFill();
                         _window.SetVisuals();
 
+                        while (_gameGrid.TryMatchAll()) // Не ну рыли рефакторинг нужен
+                        {
+                            await Task.Delay(200);
+                            _window.DestroyAnimation();
+                            await Task.Delay(500);
+                            _gameGrid.PushFiguresDown(out fromList, out toList); 
+                            _window.PushDownAnimation(fromList, toList);
+                            await Task.Delay(200);
+                            _window.SetVisuals();
+                            await Task.Delay(500);
+                            _gameGrid.RandomFill();
+                            _window.SetVisuals();
+                            await Task.Delay(200);
+                        }
+                        
                     }
                     else
                     {
+                        _window.MarkDeselected(_selected);
                         SwapFigures(position);
                         await Task.Delay(200);
                         _window.SetVisuals();
                         await Task.Delay(100);
                     }
                 }
-                _window.MarkDeselected(_selected);
+                else
+                {
+                    _window.MarkDeselected(_selected);
+                }
                 _selected = Vector2.NullObject;
                 _state = GameState.FirstClick;
             }

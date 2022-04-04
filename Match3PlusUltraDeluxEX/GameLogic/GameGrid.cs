@@ -42,7 +42,8 @@ namespace Match3PlusUltraDeluxEX
                     }
                 }
             }
-            RandomFill();
+            if (!Game.IsInitialized)
+                RandomFill();
             return isMatched;
         }
 

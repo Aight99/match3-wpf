@@ -74,6 +74,22 @@ namespace Match3PlusUltraDeluxEX
             }
         }
 
+        public void RandomFill()
+        {
+            var figureTypes = Enum.GetValues(typeof(FigureType));
+            for (int i = 0; i < _gridSize; i++)
+            {
+                for (int j = 0; j < _gridSize; j++)
+                {
+                    if (_figures[i, j] == null || _figures[i, j].IsNullObject)
+                    {
+                        var randomType = (FigureType)figureTypes.GetValue(_random.Next(figureTypes.Length));
+                        _figures[i, j] = new BasicFigure(randomType, new Vector2(i, j));
+                    }
+                }
+            }
+        }
+
         private bool ExecuteMatch(Vector2 position, ref IFigure firstFigure)
         {
             var matchList = GetMatchList(position, firstFigure.Type);
@@ -172,22 +188,6 @@ namespace Match3PlusUltraDeluxEX
             
             verticalLine.AddRange(horizontalLine);
             return verticalLine;
-        }
-
-        public void RandomFill()
-        {
-            var figureTypes = Enum.GetValues(typeof(FigureType));
-            for (int i = 0; i < _gridSize; i++)
-            {
-                for (int j = 0; j < _gridSize; j++)
-                {
-                    if (_figures[i, j] == null || _figures[i, j].IsNullObject)
-                    {
-                        var randomType = (FigureType)figureTypes.GetValue(_random.Next(figureTypes.Length));
-                        _figures[i, j] = new BasicFigure(randomType, new Vector2(i, j));
-                    }
-                }
-            }
         }
     }
 }

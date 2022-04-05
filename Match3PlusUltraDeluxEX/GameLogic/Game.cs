@@ -31,6 +31,12 @@ namespace Match3PlusUltraDeluxEX
 
         public IFigure GetFigure(Vector2 position) => _gameGrid.GetFigure(position);
 
+        public int GetScore() => _score;
+
+        public static void AddScore(int points) => _score += points;
+
+        public static void NullifyScore() => _score = 0;
+
         public async void SelectFigure(Vector2 position)
         {
             if (_state == GameState.FirstClick)
@@ -94,12 +100,6 @@ namespace Match3PlusUltraDeluxEX
             }
         }
 
-        private void SwapFigures(Vector2 position)
-        {
-            _gameGrid.SwapFigures(_selected, position);
-            _window.SwapAnimation(_selected, position);
-        }
-
         public void Initialize()
         {
             while (_gameGrid.TryMatchAll())
@@ -109,8 +109,10 @@ namespace Match3PlusUltraDeluxEX
             IsInitialized = true;
         }
 
-        public int GetScore() => _score;
-        public static void AddScore(int points) => _score += points;
-        public static void NullifyScore() => _score = 0;
+        private void SwapFigures(Vector2 position)
+        {
+            _gameGrid.SwapFigures(_selected, position);
+            _window.SwapAnimation(_selected, position);
+        }
     }
 }

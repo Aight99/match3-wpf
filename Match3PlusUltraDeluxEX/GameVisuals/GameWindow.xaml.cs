@@ -36,34 +36,6 @@ namespace Match3PlusUltraDeluxEX
             InitializeCounters();
         }
 
-        private void InitializeCounters()
-        {
-            Game.NullifyScore();
-            UpdateScore();
-            _timeSeconds = 0;
-            _timer = new DispatcherTimer();
-            _timer.Tick += UpdateTime;
-            _timer.Interval = new TimeSpan(0, 0, 1);
-            _timer.Start();
-        }
-        
-        private void UpdateTime(object sender, EventArgs e)
-        {
-            _timeSeconds++;
-            if (_timeSeconds >= TimeForGame)
-            {
-                _timer.Tick -= UpdateTime;
-                var results = new ResultsWindow(_game.GetScore())
-                {
-                    Top = Top,
-                    Left = Left
-                };
-                results.Show();
-                Close();
-            }
-            TimeText.Text = _timeSeconds.ToString();
-        }
-
         public void MarkSelected(Vector2 buttonIndex)
         {
             _buttons[buttonIndex].Background = new SolidColorBrush(Colors.LightCoral);
@@ -97,7 +69,7 @@ namespace Match3PlusUltraDeluxEX
             _animator.MoveAnimation(firstFigure, firstPosition, secondPosition);
             _animator.MoveAnimation(secondFigure, secondPosition, firstPosition);
         }
-        
+
         public void PushDownAnimation(List<Vector2> dropsFrom, List<Vector2> dropsTo)
         {
             for (int i = 0; i < dropsFrom.Count; i++)
@@ -141,6 +113,34 @@ namespace Match3PlusUltraDeluxEX
         {
             var score = _game.GetScore();
             ScoreText.Text = score.ToString();
+        }
+
+        private void InitializeCounters()
+        {
+            Game.NullifyScore();
+            UpdateScore();
+            _timeSeconds = 0;
+            _timer = new DispatcherTimer();
+            _timer.Tick += UpdateTime;
+            _timer.Interval = new TimeSpan(0, 0, 1);
+            _timer.Start();
+        }
+        
+        private void UpdateTime(object sender, EventArgs e)
+        {
+            _timeSeconds++;
+            if (_timeSeconds >= TimeForGame)
+            {
+                _timer.Tick -= UpdateTime;
+                var results = new ResultsWindow(_game.GetScore())
+                {
+                    Top = Top,
+                    Left = Left
+                };
+                results.Show();
+                Close();
+            }
+            TimeText.Text = _timeSeconds.ToString();
         }
 
         private void GridClick(object sender, RoutedEventArgs e)

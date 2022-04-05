@@ -14,11 +14,5 @@
         <TextBlock x:Name="TimeText" Text="7 days" FontSize="24" Canvas.Left="370" Canvas.Top="35"/>
         <Grid x:Name="GridLayout" Canvas.Top="80" Canvas.Left="260"/>
     </Canvas>
-    
-    <!-- <Grid x:Name="GridLayout" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
-    
-    <!-- <Grid x:Name="GridLayout" HorizontalAlignment="Center" VerticalAlignment="Center"> -->
-    <!--      -->
-    <!-- </Grid> -->
 
 </Window>

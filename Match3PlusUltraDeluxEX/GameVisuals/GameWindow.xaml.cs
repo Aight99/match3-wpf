@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Match3PlusUltraDeluxEX
 {
@@ -11,12 +13,15 @@ namespace Match3PlusUltraDeluxEX
         public const int CellSizePx = 70;
         public const int CanvasTop = 80; // XAML 
         public const int CanvasLeft = 260;
+        private const int TimeForGame = 10;
 
         private readonly Dictionary<Vector2, Image> _images;
         private readonly Dictionary<Vector2, Button> _buttons;
         private readonly Game _game;
         private readonly GameAnimator _animator;
+        private DispatcherTimer _timer;
         private bool _isWindowInitialized = false;
+        private int _timeSeconds;
 
         public GameWindow()
         {
@@ -28,7 +33,31 @@ namespace Match3PlusUltraDeluxEX
             CreateGridLayout();
             _game.Initialize();
             SetVisuals();
+            InitializeCounters();
+        }
+
+        private void InitializeCounters()
+        {
             Game.NullifyScore();
+            UpdateScore();
+            _timeSeconds = 0;
+            _timer = new DispatcherTimer();
+            _timer.Tick += UpdateTime;
+            _timer.Interval = new TimeSpan(0, 0, 1);
+            _timer.Start();
+        }
+        
+        private void UpdateTime(object sender, EventArgs e)
+        {
+            _timeSeconds++;
+            if (_timeSeconds >= TimeForGame)
+            {
+                _timer.Tick -= UpdateTime;
+                var results = new ResultsWindow(_game.GetScore());
+                results.Show();
+                Close();
+            }
+            TimeText.Text = _timeSeconds.ToString();
         }
 
         public void MarkSelected(Vector2 buttonIndex)

@@ -102,7 +102,10 @@ namespace Match3PlusUltraDeluxEX
 
         public void Initialize()
         {
-            while (_gameGrid.TryMatchAll()) {};
+            while (_gameGrid.TryMatchAll())
+            {
+                _gameGrid.RandomFill();
+            }
             IsInitialized = true;
         }
 

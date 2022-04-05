@@ -11,7 +11,11 @@ namespace Match3PlusUltraDeluxEX
 
         private void GoPlay(object sender, RoutedEventArgs routedEventArgs)
         {
-            var game = new GameWindow();
+            var game = new GameWindow
+            {
+                Top = Top,
+                Left = Left
+            };
             game.Show();
             Close();
         }

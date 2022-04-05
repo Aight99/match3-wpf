@@ -13,7 +13,7 @@ namespace Match3PlusUltraDeluxEX
         public const int CellSizePx = 70;
         public const int CanvasTop = 80; // XAML 
         public const int CanvasLeft = 260;
-        private const int TimeForGame = 10;
+        private const int TimeForGame = 60;
 
         private readonly Dictionary<Vector2, Image> _images;
         private readonly Dictionary<Vector2, Button> _buttons;
@@ -53,7 +53,11 @@ namespace Match3PlusUltraDeluxEX
             if (_timeSeconds >= TimeForGame)
             {
                 _timer.Tick -= UpdateTime;
-                var results = new ResultsWindow(_game.GetScore());
+                var results = new ResultsWindow(_game.GetScore())
+                {
+                    Top = Top,
+                    Left = Left
+                };
                 results.Show();
                 Close();
             }

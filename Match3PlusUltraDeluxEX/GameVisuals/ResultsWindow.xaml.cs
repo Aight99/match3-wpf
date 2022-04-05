@@ -12,7 +12,11 @@ namespace Match3PlusUltraDeluxEX
 
         private void BackInMenu(object sender, RoutedEventArgs e)
         {
-            var menu = new MenuWindow();
+            var menu = new MenuWindow
+            {
+                Top = Top,
+                Left = Left
+            };
             menu.Show();
             Close();
         }
